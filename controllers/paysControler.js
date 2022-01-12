@@ -15,14 +15,12 @@ const create=async (req, res)=>{
      }
      // Creation d'un nouveau pays
      try {
-         let newUser={
+         let newPays={
              code: req.body.code,
-             libelle:req.body.libelle,
-             date_upate:req.body.date_update.parse(),
-             active:true
+             libelle:req.body.libelle
          };
-        
-         await paysService.CreatePays(req, res);
+          
+         await paysService.CreatePays(newPays, res);
          //return res.send({"status":200,"data":req.body});
      } catch (error) {
          

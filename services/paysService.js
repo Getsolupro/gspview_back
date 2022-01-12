@@ -1,13 +1,14 @@
 import Connection from "../config/connectDB.js";
 import passport from "passport";
 import { response } from "express";
+import moment from "moment";
 
 
-const CreatePays = (req, res) => {
+const CreatePays = (pays, res) => {
     try {
         Connection.query(
             "SELECT * FROM pays where code=? "
-            , req.code,
+            , pays.code,
             function (error, result) {
                 if (result.length>0) {
                     return res.send(
@@ -18,9 +19,9 @@ const CreatePays = (req, res) => {
                 }
                 else{
                     let data={
-                        code:req.body.code,
-                        libelle:req.body.libelle,
-                        date_update:req.body.date_update.parse(),
+                        code:pays.code,
+                        libelle:pays.libelle,
+                        date_update:moment().format().toString(),
                         active:true
                     };
                     Connection.query(
