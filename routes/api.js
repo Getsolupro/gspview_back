@@ -7,6 +7,9 @@ import authValidation from "../valiation/authValidation.js";
 import loginController from "../controllers/loginController.js";
 import passport from "passport";
 import AuthMiddleware from "../middleware/AuthMiddleware.js";
+import paysService from "../services/paysService.js";
+import paysValidation from "../validation/paysValidation.js";
+import paysControler from "../controllers/paysControler.js";
 //import AuthenficateToken from "../middleware/AuthMiddleware.js";
 
 
@@ -22,6 +25,10 @@ const InitWebRoutes = (app) => {
     router.post("/loginUser",authValidation.ValidateAuthentification, loginController.LoginUser);
    // router.post("/refreshToken", AuthMiddleware.AuthenficateToken,loginController.RefreshToken);
    router.post("/refreshToken",loginController.RefreshToken);
+
+   // routes users
+   router.get("/createPays",paysValidation.ValidateRegisterPays, paysControler.create);
+
     return app.use("/", router);
     
 };

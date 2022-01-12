@@ -1,76 +1,62 @@
-///import Connection from "../config/connectDB";
+
 import Connection from "../config/connectDB.js";
-import Jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import bcrypt from "bcrypt"
-import passport from "passport";
-import { response } from "express";
 
 
-const LoginUser = (req, res, user) => {
-
-    try {
-        Connection.query(
-            "SELECT * FROM users where email=? "
-            , user.email,
-            function (error, result) {
-                if (error) {
-                    reject(error);
-                    console.log(error);
-                }
-                if (result.length > 0) {
-                    let statut = [];
-                    let message = null;
-                    let data = [];
-                    bcryptjs.compare(user.password,
-                        result[0].password,
-                        (error, response) => {
-                            if (response) {
-                                req.session.user = result;
-                                const accessToken = Jwt.sign(result[0], process.env.ACCES_TOKEN_SECRET, { expiresIn: '1800s' });
-                                const refreshToken = Jwt.sign(result[0], process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1y' });
-                                return res.send({ "status": 200, accessToken,refreshToken });
-                            }
-                            else {
-                                return res.send({ "status": 401, "erreur": " Mot de passe incorrects" });
-                            }
-                        });
-                }
-                else {
-                    return res.send({ "status": 401, "erreur": " Mot de passe ou email incorrects " });
-
-                }
-
-            }
-        )
-    } catch (error) {
-        reject(error);
-        console.log("erreur");
-    }
+const CreateNewUser=(user)=>{
+  return new Promise( async (resolve, reject)=>{
+        try {
+            let check=await checkEmailUser(user.email);
+           console.log(check);
+           if(check){
+            reject(` Cet email " ${user.email}" existe deja `)
+           }else{
+                // Crypter le mot de passe
+                let salt=bcryptjs.genSaltSync(10);
+                let data={
+                    email:user.email,
+                    password:bcryptjs.hashSync(user.password,salt)
+                };
+                Connection.query(
+                    "INSERT INTO users set ?", data, function(errors, row){
+                        if(errors){
+                            reject(errors);
+                        }
+                        resolve("Nouveau utilisateur crée vaec succès");
+                    }
+                )
+           }
+        } catch (error) {
+            reject(error);
+        }
+  });
 }
 
-const RefreshToken=(req, res, user)=>{
-    const authHeaders=req.headers["authorization"];
-    const token=authHeaders && authHeaders.split(' ')[1];
-    if(!token){
-       return res.sendStatus(401);
-    }
-    Jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (error, user)=>{
-        if(error){
-            return res.sendStatus(401);
+let checkEmailUser=(email)=>{
+    return new Promise(((resolve, reject)=>{
+        try {
+            Connection.query(
+                "SELECT * FROM users users where email = ?",
+                email ,
+                function(error, row){
+                    if(error){
+                        reject(error);
+                    }
+                    if(row.length>0){
+                        resolve(true);
+                    }
+                    else{
+                        resolve(false);
+                    }
+                } 
+            )
+        } catch (error) {
+            reject(error);
         }
-        delete user.iat;
-        delete user.exp;
-        // Verifier en bd que le user existe toujours et qu'il a toujours les droits 
-        const refreshToken = Jwt.sign(user, process.env.ACCES_TOKEN_SECRET, { expiresIn: '1800s' });
-        return res.send({
-            "statut":200,
-            accessToken:refreshToken
-        });                     
-    })
+    }))
 }
 
 export default {
-    LoginUser,
-    RefreshToken
+    CreateNewUser
 }
