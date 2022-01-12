@@ -1,6 +1,8 @@
 import paysService from "../services/paysService.js";
+import { ValidationError } from "express-validation";
+import { validationResult } from "express-validator";
 
-const create=async ()=>{
+const create=async (req, res)=>{
      // Validation des données envoyées
      let errorsArr=[];
      let validationErrors=validationResult(req);

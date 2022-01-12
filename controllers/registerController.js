@@ -9,6 +9,7 @@ const RegisterUser=(req, res)=>{
 
 const CreateUser= async (req, res)=>{
     // Validation des données envoyées
+    console.log(req.body);
     let errorsArr=[];
     let validationErrors=validationResult(req);
     if(!validationErrors.isEmpty()){
@@ -16,7 +17,6 @@ const CreateUser= async (req, res)=>{
         errors.forEach((item)=>{
             errorsArr.push(item.msg);
         });
-        req.flash("errors",errorsArr);
         return res.send({"status":404,"erreurs":errorsArr});
     }
     // Creation d'un nouvel utilisateur

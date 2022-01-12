@@ -27,8 +27,8 @@ const InitWebRoutes = (app) => {
    // router.post("/refreshToken", AuthMiddleware.AuthenficateToken,loginController.RefreshToken);
    router.post("/refreshToken",loginController.RefreshToken);
 
-   // routes users
-   router.get("/createPays",paysValidation.ValidateRegisterPays, paysControler.create);
+   // routes pays
+   router.post("/creerPays",paysValidation.ValidateRegisterPays, paysControler.create);
 
     return app.use("/", router);
     
