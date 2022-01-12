@@ -3,7 +3,7 @@ import passport from "passport";
 import { response } from "express";
 
 
-const CreateUser = (req, res) => {
+const CreatePays = (req, res) => {
     try {
         Connection.query(
             "SELECT * FROM pays where code=? "

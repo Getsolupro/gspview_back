@@ -1,6 +1,6 @@
 import paysService from "../services/paysService.js";
 
-const create=()=>{
+const create=async ()=>{
      // Validation des données envoyées
      let errorsArr=[];
      let validationErrors=validationResult(req);

@@ -5,16 +5,19 @@ if(process.env.NODE_ENV !== "production") {
 
 import express from "express";
 import cors from "cors";
-//import InitWebRoutes from "./routes/api.js";
+import InitWebRoutes from "./routes/api.js";
 //import ConfigViewEngine from "./config/viewEngine.js";
 //import Connection from "./config/connectDB.js";
 import flash from "connect-flash";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import http from "http";
+import fs from "fs";
 
 const app = express();
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+//app.use(fs())
 app.use(cors(
   {
     origin:["http://localhost:3000"],
@@ -41,7 +44,7 @@ app.use(session({
 //Activer le message flash
 app.use(flash());
 
-//InitWebRoutes(app);
+InitWebRoutes(app);
 
 const port=process.env.PORT || 3000
 app.listen(port, () => {

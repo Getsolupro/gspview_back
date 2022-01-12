@@ -3,7 +3,8 @@ import GetLogin from "../controllers/loginController.js";
 //import RegisterUser from "../controllers/registerController.js";
 
 import registerController from "../controllers/registerController.js";
-import authValidation from "../valiation/authValidation.js";
+import authValidation from "../validation/authValidation.js";
+//import authValidation from "../valiation/authValidation.js";
 import loginController from "../controllers/loginController.js";
 import passport from "passport";
 import AuthMiddleware from "../middleware/AuthMiddleware.js";
