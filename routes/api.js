@@ -11,6 +11,8 @@ import AuthMiddleware from "../middleware/AuthMiddleware.js";
 import paysService from "../services/paysService.js";
 import paysValidation from "../validation/paysValidation.js";
 import paysControler from "../controllers/paysControler.js";
+import adresseValidation from "../validation/adresseValidation.js";
+import adresseController from "../controllers/adresseController.js";
 //import AuthenficateToken from "../middleware/AuthMiddleware.js";
 
 
@@ -29,6 +31,9 @@ const InitWebRoutes = (app) => {
 
    // routes pays
    router.post("/creerPays",paysValidation.ValidateRegisterPays, paysControler.create);
+
+   // routes adresse 
+   router.post("/creerAdresse",adresseValidation.ValidateRegisterAdresse,adresseController.create)
 
     return app.use("/", router);
     
