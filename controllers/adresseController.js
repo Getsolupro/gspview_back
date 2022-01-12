@@ -23,9 +23,7 @@ const create=async (req, res)=>{
              ville:req.body.ville,
              pays_id:req.body.pays.id
          };
-          console.log(newAdresse);
           await adresseService.CreateAdresse(newAdresse, res);
-         //await paysService.CreatePays(newAdresse, res);
      } catch (error) {
          
      }
