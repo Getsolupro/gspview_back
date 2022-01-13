@@ -13,6 +13,8 @@ import paysValidation from "../validation/paysValidation.js";
 import paysControler from "../controllers/paysControler.js";
 import adresseValidation from "../validation/adresseValidation.js";
 import adresseController from "../controllers/adresseController.js";
+import profileValidation from "../validation/profileValidation.js";
+import profileControler from "../controllers/profileControler.js";
 //import AuthenficateToken from "../middleware/AuthMiddleware.js";
 
 
@@ -34,6 +36,9 @@ const InitWebRoutes = (app) => {
 
    // routes adresse 
    router.post("/creerAdresse",adresseValidation.ValidateRegisterAdresse,adresseController.create)
+
+   // route profile
+  router.post("/creerProfile", profileValidation.ValidateRegisterProfile, profileControler.create)
 
     return app.use("/", router);
     
