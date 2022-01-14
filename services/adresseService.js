@@ -7,8 +7,8 @@ import moment from "moment";
 const CreateAdresse = (adresse, res) => {
     try {
         Connection.query(
-            "SELECT * FROM adresse where email=? "
-            , adresse.email,
+            "SELECT * FROM adresse where telephone1=? "
+            , adresse.telephone1,
             function (error, result) {
                 if (result.length>0) {
                     return res.send(

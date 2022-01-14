@@ -1,5 +1,6 @@
 import { validationResult } from "express-validator";
 import registerService from "../services/registerService.js";
+import Connection from "../config/connectDB.js";
 
 //import createNewUser from "../services/registerService";
 
@@ -7,9 +8,12 @@ const RegisterUser=(req, res)=>{
     return res.send("enregistrer");
 }
 
+const TestUser=(req, res)=>{
+
+}
+
 const CreateUser= async (req, res)=>{
     // Validation des données envoyées
-    console.log(req.body);
     let errorsArr=[];
     let validationErrors=validationResult(req);
     if(!validationErrors.isEmpty()){
@@ -23,10 +27,19 @@ const CreateUser= async (req, res)=>{
     try {
         let newUser={
             email: req.body.email,
-            password:req.body.password
+            password:req.body.password,
+            nom:req.body.nom,
+            prenom:req.body.prenom,
+            photo:req.body.photo,
+            profile:req.body.profile,
+            code_postale:req.body.code_postale,
+            telephone1:req.body.telephone1,
+            telephone2:req.body.telephone2,
+            ville:req.body.ville,
+            pays:req.body.pays,
+            privilege:req.body.privilege
         };
-        await registerService.CreateNewUser(newUser);
-        return res.send({"status":200,"data":req.body});
+        await registerService.Create(newUser, res);
     } catch (error) {
         
     }

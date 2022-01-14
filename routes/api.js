@@ -15,6 +15,8 @@ import adresseValidation from "../validation/adresseValidation.js";
 import adresseController from "../controllers/adresseController.js";
 import profileValidation from "../validation/profileValidation.js";
 import profileControler from "../controllers/profileControler.js";
+import privilegeValidation from "../validation/privilegeValidation.js";
+import privilegeController from "../controllers/privilegeController.js";
 //import AuthenficateToken from "../middleware/AuthMiddleware.js";
 
 
@@ -26,7 +28,9 @@ const InitWebRoutes = (app) => {
     });
   
     router.get("/getUsers", registerController.RegisterUser);
+    // routes users
     router.post("/createUser", authValidation.ValidateRegister, registerController.CreateUser);
+    
     router.post("/loginUser",authValidation.ValidateAuthentification, loginController.LoginUser);
    // router.post("/refreshToken", AuthMiddleware.AuthenficateToken,loginController.RefreshToken);
    router.post("/refreshToken",loginController.RefreshToken);
@@ -39,6 +43,10 @@ const InitWebRoutes = (app) => {
 
    // route profile
   router.post("/creerProfile", profileValidation.ValidateRegisterProfile, profileControler.create)
+
+  // route privilege
+  router.post("/creerPrivilege",privilegeValidation.ValidateRegisterPrivilege,privilegeController.create);
+  router.get("/privileges",privilegeController.read);
 
     return app.use("/", router);
     

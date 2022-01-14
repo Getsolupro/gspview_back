@@ -19,28 +19,38 @@ const LoginUser = (req, res, user) => {
                     console.log(error);
                 }
                 if (result.length > 0) {
-                    let statut = [];
-                    let message = null;
-                    let data = [];
                     bcryptjs.compare(user.password,
                         result[0].password,
                         (error, response) => {
                             if (response) {
                                 req.session.user = result;
-                                const accessToken = Jwt.sign(result[0], process.env.ACCES_TOKEN_SECRET, { expiresIn: '1800s' });
-                                const refreshToken = Jwt.sign(result[0], process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1y' });
-                                return res.send({ "status": 200, accessToken,refreshToken });
+                                Connection.query(
+                                    "SELECT DISTINCT code FROM profile INNER JOIN user_profile_privilege ON profile.id = user_profile_privilege.profile_id ",
+                                    (error, result2)=>{
+                                        if(error){
+                                            console.log(error);
+                                        }
+                                       let data={};
+                                       if(result){
+                                            data.profile=result2[0].code;
+                                            data.email=user.email;
+                                            
+                                       }
+                                        const accessToken = Jwt.sign(result[0], process.env.ACCES_TOKEN_SECRET, { expiresIn: '1800s' });
+                                        const refreshToken = Jwt.sign(result[0], process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1y' });
+                                        return res.send({ "status": 200, "data":data, accessToken,refreshToken });
+                                    }
+                                )
                             }
                             else {
                                 return res.send({ "status": 401, "erreur": " Mot de passe incorrects" });
                             }
-                        });
+                        }
+                    );
                 }
                 else {
                     return res.send({ "status": 401, "erreur": " Mot de passe ou email incorrects " });
-
                 }
-
             }
         )
     } catch (error) {
