@@ -1,4 +1,3 @@
-///import Connection from "../config/connectDB";
 import Connection from "../config/connectDB.js";
 import Jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
@@ -25,20 +24,20 @@ const LoginUser = (req, res, user) => {
                             if (response) {
                                 req.session.user = result;
                                 Connection.query(
-                                    "SELECT DISTINCT code FROM profile INNER JOIN user_profile_privilege ON profile.id = user_profile_privilege.profile_id ",
+                                    "SELECT DISTINCT code FROM profile INNER JOIN user_profile_privilege ON profile.id = user_profile_privilege.profile_id INNER JOIN users on user_profile_privilege.user_id=? ",result[0].id,
                                     (error, result2)=>{
                                         if(error){
                                             console.log(error);
                                         }
                                        let data={};
-                                       if(result){
+                                       if(result2.length>0){
                                             data.profile=result2[0].code;
                                             data.email=user.email;
-                                            
+                                            data.id=result[0].id
                                        }
-                                        const accessToken = Jwt.sign(result[0], process.env.ACCES_TOKEN_SECRET, { expiresIn: '1800s' });
-                                        const refreshToken = Jwt.sign(result[0], process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1y' });
-                                        return res.send({ "status": 200, "data":data, accessToken,refreshToken });
+                                        const accessToken = Jwt.sign(data, process.env.ACCES_TOKEN_SECRET, { expiresIn: '1800s' });
+                                        const refreshToken = Jwt.sign(data, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1y' });
+                                        return res.send({ "status": 200, accessToken,refreshToken });
                                     }
                                 )
                             }
@@ -71,7 +70,7 @@ const RefreshToken=(req, res, user)=>{
         }
         delete user.iat;
         delete user.exp;
-        // Verifier en bd que le user existe toujours et qu'il a toujours les droits 
+        // Verifier en bd que le user existe toujours et qu'il a toujours les memes droits 
         const refreshToken = Jwt.sign(user, process.env.ACCES_TOKEN_SECRET, { expiresIn: '1800s' });
         return res.send({
             "statut":200,

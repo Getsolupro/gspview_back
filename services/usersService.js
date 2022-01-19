@@ -50,6 +50,29 @@ const CreateUser = (user, res) => {
     }
 }
 
+const ReadById=(id, res)=>{
+    try {
+        Connection.query("SELECT * FROM users WHERE id=?", id, 
+            function(err, result){
+                if(err){
+                    console.log(err);
+                    return
+                }
+                return res.send(
+                    {
+                        "statut":200,
+                        "data":result[0],
+                        success:true
+                    }
+                )
+
+            }
+        )
+    } catch (error) {
+        
+    }
+}
+
 export default {
     CreateUser
 }

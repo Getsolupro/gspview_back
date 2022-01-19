@@ -15,3 +15,12 @@ const ValidateRegisterUser=[
     check("profile","Profile est obligatoire ").notEmpty(),
     check("adresse","Adresse est obligatoire ").notEmpty(),
 ];
+
+const ValidateReadUser=[
+    check('id',"Id est obligatoire").notEmpty()
+]
+
+export default {
+    ValidateReadUser,
+    ValidateRegisterUser
+}

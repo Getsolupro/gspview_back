@@ -17,6 +17,8 @@ import profileValidation from "../validation/profileValidation.js";
 import profileControler from "../controllers/profileControler.js";
 import privilegeValidation from "../validation/privilegeValidation.js";
 import privilegeController from "../controllers/privilegeController.js";
+import userController from "../controllers/userController.js";
+import userValidation from "../validation/userValidation.js";
 //import AuthenficateToken from "../middleware/AuthMiddleware.js";
 
 
@@ -30,8 +32,9 @@ const InitWebRoutes = (app) => {
     router.get("/getUsers", registerController.RegisterUser);
     // routes users
     router.post("/createUser", authValidation.ValidateRegister, registerController.CreateUser);
+    router.get("/readById", userValidation.ValidateReadUser, userController.readById);
     
-    router.post("/loginUser",authValidation.ValidateAuthentification, loginController.LoginUser);
+    router.post("/login",authValidation.ValidateAuthentification, loginController.LoginUser);
    // router.post("/refreshToken", AuthMiddleware.AuthenficateToken,loginController.RefreshToken);
    router.post("/refreshToken",loginController.RefreshToken);
 

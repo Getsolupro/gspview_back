@@ -18,13 +18,7 @@ const app = express();
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 //app.use(fs())
-app.use(cors(
-  {
-    origin:["http://localhost:3000"],
-    methods:["GET","POST"],
-    credentials:true
-  }
-));
+app.use(cors());
 //ConfigViewEngine(app);
 
 // Utilisation de cookie parser
